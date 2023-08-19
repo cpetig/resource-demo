@@ -12,11 +12,12 @@ namespace my_world {  class ResourceBase{
   template <typename T> struct Owned{
     T *ptr;
   }; }
-namespace test { namespace example { namespace my_interface { class MyObject : my_world::ResourceBase {
+namespace test { namespace example { namespace my_interface { class MyObject : public my_world::ResourceBase {
   // private implementation data
   struct pImpl;
   pImpl * p_impl;
   public:
+  ~MyObject();
   MyObject(uint32_t a);
   void Set(uint32_t v);
   uint32_t Get();

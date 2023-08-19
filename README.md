@@ -2,21 +2,25 @@
 
 ## Prerequisites
 
-Rust and target wasm32-unknown-unknown
+Rust with target wasm32-wasi
 
 CMake
 
 ## Compiling and Running
 ```bash
 cd guest-rust
-cargo build --target wasm32-unknown-unknown --release
+cargo build --target wasm32-wasi --release
 cd ../host-wamr
 mkdir build
 cd build
 cmake ..
 make
-
+./executor
 ```
+
+Expected Output:
+
+`drop with value 34`
 
 ## Regenerating C++ host bindings
 

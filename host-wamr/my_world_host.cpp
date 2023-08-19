@@ -4,22 +4,25 @@
 
 
 // Component Adapters
-static ::Owned<my_interface::MyObject> host_test_example_my_interface_constructor_my_object(wasm_exec_env_t exec_env, uint32_t a) {
-  auto call_result = ::test::example::my_interface::ConstructorMyObject(a);
-  /* TODO handle 1460 */
+static int32_t host_test_example_my_interface_constructor_my_object(wasm_exec_env_t exec_env, uint32_t a) {
+  auto call_result = new ::test::example::my_interface::MyObject(a);
+  return call_result->id;
 }
-static void host_test_example_my_interface_method_my_object.set(wasm_exec_env_t exec_env, int32_t self, uint32_t v) {
-  ::test::example::my_interface::MethodMyObject.set(/* TODO handle 1265 */, v);
+static void host_test_example_my_interface_method_my_object_set(wasm_exec_env_t exec_env, int32_t self, uint32_t v) {
+  dynamic_cast<test::example::my_interface::MyObject*>(my_world::ResourceBase::lookup_resource(self))->Set(v);
 }
-static uint32_t host_test_example_my_interface_method_my_object.get(wasm_exec_env_t exec_env, int32_t self) {
-  auto call_result = ::test::example::my_interface::MethodMyObject.get(/* TODO handle 1265 */);
-  return call_result;
+static uint32_t host_test_example_my_interface_method_my_object_get(wasm_exec_env_t exec_env, int32_t self) {
+  return dynamic_cast<test::example::my_interface::MyObject*>(my_world::ResourceBase::lookup_resource(self))->Get();
+}
+static void host_test_example_my_interface_method_my_object_drop(wasm_exec_env_t exec_env, int32_t self) {
+  delete my_world::ResourceBase::lookup_resource(self);
 }
 void register_my_world() {
     static NativeSymbol test_example_my_interface_funs[] = {
         { "[constructor]my-object", (void*)host_test_example_my_interface_constructor_my_object, "(i)i", nullptr },
-        { "[method]my-object.set", (void*)host_test_example_my_interface_method_my_object.set, "(ii)", nullptr },
-        { "[method]my-object.get", (void*)host_test_example_my_interface_method_my_object.get, "(i)i", nullptr },
+        { "[method]my-object.set", (void*)host_test_example_my_interface_method_my_object_set, "(ii)", nullptr },
+        { "[method]my-object.get", (void*)host_test_example_my_interface_method_my_object_get, "(i)i", nullptr },
+        { "[resource-drop]my-object", (void*)host_test_example_my_interface_method_my_object_drop, "(i)", nullptr },
     };
     wasm_runtime_register_natives("test:example/my-interface", test_example_my_interface_funs, sizeof(test_example_my_interface_funs)/sizeof(NativeSymbol));
 }
