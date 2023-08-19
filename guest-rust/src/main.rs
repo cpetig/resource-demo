@@ -8,5 +8,5 @@ fn main() {
     let o = test::example::my_interface::MyObject::new(42);
     o.set(17);
     o.set(o.get()*2);
-//    println!("Object is {}", o.get());
+    println!("Object is {}", o.get());
 }
