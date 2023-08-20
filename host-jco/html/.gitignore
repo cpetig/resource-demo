@@ -1,3 +1,6 @@
 /exports
 /imports
 /*.d.ts
+/component.core2.wasm
+/component.core.wasm
+/component.js
