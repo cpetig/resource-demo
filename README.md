@@ -10,12 +10,12 @@ CMake
 
 | |Guest|Host|
 |---|---|---|
-|C|wit-bindgen|[see below][1]|
-|C++|cpetig/wit-bindgen|cpetig/wit-bindgen + WAMR|
-|Rust|wit-bindgen|[see below][2]|
-|JavaScript| jco? |jco|
-|Go|[see below][3]| ? |
-|Python|[see below][4]|[see below][4] |
+|C|✅ wit-bindgen|[see below][1]|
+|C++|🚧 cpetig/wit-bindgen|🚧 cpetig/wit-bindgen + WAMR|
+|Rust|✅ wit-bindgen|🐛 [see below][2]|
+|JavaScript| jco? |✅ jco|
+|Go|☁️ [see below][3]| ? |
+|Python|☁️ [see below][4]|☁️ [see below][4] |
 
 ## Compiling and Running
 
