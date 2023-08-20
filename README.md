@@ -6,6 +6,17 @@ Rust with target wasm32-wasi
 
 CMake
 
+## Working
+
+| |Guest|Host|
+|---|---|---|
+|C|wit-bindgen|[see below][1]|
+|C++|cpetig/wit-bindgen|cpetig/wit-bindgen + WAMR|
+|Rust|wit-bindgen|[see below][2]|
+|JavaScript| jco? |jco|
+|Go|[see below][3]| ? |
+|Python|[see below][4]|[see below][4] |
+
 ## Compiling and Running
 
 ```bash
@@ -48,6 +59,7 @@ wit-bindgen cpp-host ../wit/simple.wit
 
 ### Host languages
 
+[2]
 - Rust:
 
     Wasmtime host doesn't support generating bindings for resources.
@@ -56,16 +68,17 @@ wit-bindgen cpp-host ../wit/simple.wit
 
     Wasmer bindgen only supports the old witx, not the newer wit format. You could write a host binding generator within wit-bindgen though.
 
-- JavaScript: JCO doesn't support resources yet, IIRC.
-
+[1]
 - C: Currently I generate C++ host bindings for WAMR, C would be feasible.
 
 - Python: https://pypi.org/project/componentize-py/ (?)
 
 ### Guest languages
 
-- JavaScript: https://github.com/bytecodealliance/javy, you will need another tool to generate guest bindings for imported functions, IIRC. A path using C bindings with yet to be written JavaScript wrapping should be viable.
+- JavaScript: https://github.com/bytecodealliance/javy is potentially smaller than spidermonkey embedded by jco, you will need another tool to generate guest bindings for imported functions, IIRC. A path using C bindings with yet to be written JavaScript wrapping should be viable.
 
+[4]
 - Python: https://pypi.org/project/componentize-py/ 
 
+[3]
 - Go: WIT bindgen support is being worked on https://github.com/bytecodealliance/SIG-Guest-Languages/blob/main/docs/subgroups.md
