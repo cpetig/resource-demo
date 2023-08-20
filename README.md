@@ -13,7 +13,7 @@ CMake
 |C|✅ wit-bindgen|[see below][1]|
 |C++|🚧 cpetig/wit-bindgen|🚧 cpetig/wit-bindgen + WAMR|
 |Rust|✅ wit-bindgen|🐛 [see below][2]|
-|JavaScript| jco? |✅ jco|
+|JavaScript|🚧 [see below][5] |✅ jco|
 |Go|☁️ [see below][3]| ? |
 |Python|☁️ [see below][4]|☁️ [see below][4] |
 
@@ -75,7 +75,10 @@ wit-bindgen cpp-host ../wit/simple.wit
 
 ### Guest languages
 
-- JavaScript: https://github.com/bytecodealliance/javy is potentially smaller than spidermonkey embedded by jco, you will need another tool to generate guest bindings for imported functions, IIRC. A path using C bindings with yet to be written JavaScript wrapping should be viable.
+[5]
+- JavaScript: Jco likely needs the unfinished https://github.com/bytecodealliance/componentize-js/tree/resources for resource support in guests
+
+    https://github.com/bytecodealliance/javy is potentially smaller than spidermonkey embedded by jco, you will need another tool to generate guest bindings for imported functions, IIRC. A path using C bindings with yet to be written JavaScript wrapping should be viable.
 
 [4]
 - Python: https://pypi.org/project/componentize-py/ 
