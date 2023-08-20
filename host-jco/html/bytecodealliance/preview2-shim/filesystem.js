@@ -155,3 +155,11 @@ export const types = {
 };
 
 export { types as filesystemTypes }
+
+export const { getDirectories } = preopens;
+export const { appendViaStream,
+  dropDescriptor,
+  dropDirectoryEntryStream,
+  getType,
+  openAt,
+  writeViaStream } = types;

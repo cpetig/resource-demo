@@ -70,3 +70,13 @@ export const terminalStdout = {
     return 2;
   }
 };
+
+export const { getEnvironment } = environment;
+export const { getStderr } = stderr;
+export const { getStdin } = stdin;
+export const { getStdout } = stdout;
+export const { dropTerminalInput } = terminalInput;
+export const { dropTerminalOutput } = terminalOutput;
+export const { getTerminalStderr } = terminalStderr;
+export const { getTerminalStdin } = terminalStdin;
+export const { getTerminalStdout } = terminalStdout;

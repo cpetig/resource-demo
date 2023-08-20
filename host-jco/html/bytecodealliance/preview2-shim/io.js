@@ -58,3 +58,8 @@ export const streams = {
     console.log(`[streams] Drop output stream ${s}`);
   }
 };
+
+export const { blockingWrite,
+  dropInputStream,
+  dropOutputStream,
+  write } = streams;

@@ -1,28 +1,7 @@
-import { environment, exit as exit$1, stderr, stdin, stdout, terminalInput, terminalOutput, terminalStderr, terminalStdin, terminalStdout } from './bytecodealliance/preview2-shim/cli.js';
-import { preopens, types } from './bytecodealliance/preview2-shim/filesystem.js';
-import { streams } from './bytecodealliance/preview2-shim/io.js';
+import { dropTerminalInput, dropTerminalOutput, exit, getEnvironment, getStderr, getStdin, getStdout, getTerminalStderr, getTerminalStdin, getTerminalStdout } from './bytecodealliance/preview2-shim/cli.js';
+import { appendViaStream, dropDescriptor, dropDirectoryEntryStream, getDirectories, getType, openAt, writeViaStream } from './bytecodealliance/preview2-shim/filesystem.js';
+import { blockingWrite, dropInputStream, dropOutputStream, write } from './bytecodealliance/preview2-shim/io.js';
 import { MyObject } from './test_example/my-interface.js';
-const { getEnvironment } = environment;
-const { exit } = exit$1;
-const { getStderr } = stderr;
-const { getStdin } = stdin;
-const { getStdout } = stdout;
-const { dropTerminalInput } = terminalInput;
-const { dropTerminalOutput } = terminalOutput;
-const { getTerminalStderr } = terminalStderr;
-const { getTerminalStdin } = terminalStdin;
-const { getTerminalStdout } = terminalStdout;
-const { getDirectories } = preopens;
-const { appendViaStream,
-  dropDescriptor,
-  dropDirectoryEntryStream,
-  getType,
-  openAt,
-  writeViaStream } = types;
-const { blockingWrite,
-  dropInputStream,
-  dropOutputStream,
-  write } = streams;
 
 const base64Compile = str => WebAssembly.compile(typeof Buffer !== 'undefined' ? Buffer.from(str, 'base64') : Uint8Array.from(atob(str), b => b.charCodeAt(0)));
 
@@ -1332,7 +1311,5 @@ const run$1 = {
   run: run,
   
 };
-
-run();
 
 export { run$1 as run, run$1 as 'wasi:cli/run' }
