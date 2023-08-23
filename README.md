@@ -12,7 +12,7 @@ CMake
 |---|---|---|
 |C|✅ wit-bindgen|[see below][1]|
 |C++|🚧 cpetig/wit-bindgen|🚧 cpetig/wit-bindgen + WAMR|
-|Rust|✅ wit-bindgen|🐛 [see below][2]|
+|Rust|✅ wit-bindgen|🚧 [see below][2]|
 |JavaScript|🚧 [see below][5] |✅ jco|
 |Go|☁️ [see below][3]| ? |
 |Python|☁️ [see below][4]|☁️ [see below][4] |
@@ -62,8 +62,8 @@ wit-bindgen cpp-host ../wit/simple.wit
 [2]
 - Rust:
 
-    Wasmtime host doesn't support generating bindings for resources.
-    https://github.com/bytecodealliance/wasmtime/issues/6722
+    Wasmtime host support for resources isn't merged yet
+    https://github.com/bytecodealliance/wasmtime/pull/6886
 
 
     Wasmer bindgen only supports the old witx, not the newer wit format. You could write a host binding generator within wit-bindgen though.

@@ -8,10 +8,21 @@ use wasmtime::{
 
 use crate::test::example::my_interface::MyObject;
 
-wasmtime::component::bindgen!({ path: "../wit/simple.wit", world: "my-world" });
+wasmtime::component::bindgen!({ 
+    path: "../wit/simple.wit", 
+    world: "my-world",
+    resources: {
+        "my-object": ObjectImpl
+    },
+    resource_mode: Object,
+});
 
 struct ObjectImpl {
     value: u32,
+}
+
+impl crate::test::example::my_interface::MyObject for ObjectImpl {
+    
 }
 
 struct HostState {
