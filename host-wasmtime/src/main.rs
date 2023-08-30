@@ -1,94 +1,66 @@
-use anyhow::{Result, anyhow};
+use anyhow::{anyhow, Result};
 
+use test::example::my_interface::Host;
 use wasmtime::{
     self,
-    component::{Component, Linker},
+    component::{Component, Linker, Resource},
     Config, Engine, Store,
 };
 
 use crate::test::example::my_interface::MyObject;
 
-wasmtime::component::bindgen!({ 
-    path: "../wit/simple.wit", 
+wasmtime::component::bindgen!({
+    path: "../wit/simple.wit",
     world: "my-world",
-    resources: {
-        "my-object": ObjectImpl
-    },
-    resource_mode: Object,
 });
 
 struct ObjectImpl {
     value: u32,
 }
 
-impl crate::test::example::my_interface::MyObject for ObjectImpl {
-    
-}
-
+#[derive(Default)]
 struct HostState {
     object_table: std::collections::HashMap<u32, ObjectImpl>,
 }
 
+impl Host for HostState {}
+
 impl test::example::my_interface::HostMyObject for HostState {
-    // type Resource = ObjectImpl;
-
-    fn new(
-        store: &mut wasmtime::StoreContextMut<'_, Self>,
-        a: u32,
-    ) -> wasmtime::Result<wasmtime::component::Resource<ObjectImpl>>
-    where
-        Self: Sized,
-    {
-        let state = store.data_mut();
-
-        let handle = wasmtime::component::Resource::<ObjectImpl>::new_own(
-            state.object_table.len() as u32,
-        );
-        handle
-            .object_table
+    fn new(&mut self, a: u32) -> wasmtime::Result<Resource<MyObject>> {
+        let handle = Resource::<MyObject>::new_own(self.object_table.len() as u32);
+        self.object_table
             .insert(handle.rep(), ObjectImpl { value: a });
         Ok(handle)
     }
 
-    fn set(
-        &mut self,
-        res: wasmtime::component::Resource<ObjectImpl>,
-        v: u32,
-    ) -> wasmtime::Result<()>
-    where
-        Self: Sized,
-    {
+    fn set(&mut self, res: Resource<MyObject>, v: u32) -> wasmtime::Result<()> {
         self.object_table
             .get_mut(&res.rep())
-            .and_then(|o| o.value = v)?;
-        Ok(())
-    }
-
-    fn get(&mut self, res: wasmtime::component::Resource<ObjectImpl>) -> wasmtime::Result<u32>
-    where
-        Self: Sized,
-    {
-        self.object_table
-            .get(&res.rep())
-            .map(|o| Ok(o.value))
+            .map(|o| o.value = v)
             .ok_or(anyhow!(
-                "tried to get a resource `{}` that doesn't exist",
-                rep
+                "tried to set a resource `{}` that doesn't exist",
+                res.rep()
             ))
     }
 
-    fn drop(mut store: wasmtime::StoreContextMut<'_, Self>, rep: u32) -> wasmtime::Result<()> {
-        let state = store.data_mut();
+    fn get(&mut self, res: Resource<MyObject>) -> wasmtime::Result<u32> {
+        self.object_table
+            .get(&res.rep())
+            .map(|o| o.value)
+            .ok_or(anyhow!(
+                "tried to get a resource `{}` that doesn't exist",
+                res.rep()
+            ))
+    }
 
-        state
-            .object_table
-            .remove(&rep)
-            .and_then(|o| println!("Value at drop {}", o.value))
+    fn drop(&mut self, res: Resource<MyObject>) -> wasmtime::Result<()> {
+        self.object_table
+            .remove(&res.rep())
+            .map(|o| println!("Value at drop {}", o.value))
             .ok_or(anyhow!(
                 "tried to drop a resource `{}` that doesn't exist",
-                rep
-            ))?;
-        Ok(())
+                res.rep()
+            ))
     }
 }
 
@@ -99,12 +71,11 @@ use wit_component::ComponentEncoder;
 
 fn main() -> Result<()> {
     let mut config = Config::new();
-
-    Config::wasm_component_model(&mut config, true);
+    config.wasm_component_model(true);
 
     let engine = Engine::new(&config)?;
-    let mut store = Store::new(&engine, 0);
-    let linker = Linker::new(&engine);
+    let mut store = Store::new(&engine, HostState::default());
+    let mut linker = Linker::new(&engine);
 
     let wasm_module_path = "../guest.wasm";
 
@@ -118,7 +89,14 @@ fn main() -> Result<()> {
 
     let component = Component::from_binary(&engine, &component)?;
 
-    let start = component.get_typed_func::<(), ()>(&mut store, "_start")?;
+    crate::test::example::my_interface::add_to_linker(&mut linker, |s| s)?;
+
+    let (bindings, instance) = MyWorld::instantiate(&mut store, &component, &linker).unwrap();
+
+    // let result = bindings.
+    // instance.get_func(store, name)
+
+    let start = instance.get_typed_func::<(), ()>(&mut store, "_start")?;
 
     start.call(&mut store, ())?;
 

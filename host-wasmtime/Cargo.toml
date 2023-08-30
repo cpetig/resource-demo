@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-wasmtime = { git = "https://github.com/Nor2-io/wasmtime.git", branch = "resources-basic", version = "13.0.0", features = ["component-model"] }
-wit-component = "0.13.2"
+wasmtime = { git = "https://github.com/bytecodealliance/wasmtime.git", version = "13.0.0", features = ["component-model"] }
+wit-component = "0.14.0"
