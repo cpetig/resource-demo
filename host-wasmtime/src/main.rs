@@ -6,16 +6,14 @@ use wasmtime::{
     component::{Component, Linker, Resource},
     Config, Engine, Store,
 };
-use wasmtime_wasi::{
-    preview2::{Table, WasiCtx, WasiView},
-    WasiCtxBuilder,
-};
+use wasmtime_wasi::preview2::{Table, WasiCtx, WasiView};
 
 use crate::test::example::my_interface::MyObject;
 
 wasmtime::component::bindgen!({
     path: "../wit/simple.wit",
     world: "my-world",
+    async: true,
 });
 
 struct ObjectImpl {
@@ -32,7 +30,9 @@ struct HostState {
 impl Default for HostState {
     fn default() -> Self {
         let mut table = Table::new();
-        let wasi = wasmtime_wasi::preview2::WasiCtxBuilder::new().build(&mut table).unwrap();
+        let wasi = wasmtime_wasi::preview2::WasiCtxBuilder::new()
+            .build(&mut table)
+            .unwrap();
         Self {
             object_table: Default::default(),
             table,
@@ -43,15 +43,17 @@ impl Default for HostState {
 
 impl Host for HostState {}
 
+#[wasmtime::component::__internal::async_trait]
 impl test::example::my_interface::HostMyObject for HostState {
-    fn new(&mut self, a: u32) -> wasmtime::Result<Resource<MyObject>> {
+    async fn new(&mut self, a: u32) -> wasmtime::Result<Resource<MyObject>> {
+        println!("New {a}");
         let handle = Resource::<MyObject>::new_own(self.object_table.len() as u32);
         self.object_table
             .insert(handle.rep(), ObjectImpl { value: a });
         Ok(handle)
     }
 
-    fn set(&mut self, res: Resource<MyObject>, v: u32) -> wasmtime::Result<()> {
+    async fn set(&mut self, res: Resource<MyObject>, v: u32) -> wasmtime::Result<()> {
         self.object_table
             .get_mut(&res.rep())
             .map(|o| o.value = v)
@@ -61,7 +63,7 @@ impl test::example::my_interface::HostMyObject for HostState {
             ))
     }
 
-    fn get(&mut self, res: Resource<MyObject>) -> wasmtime::Result<u32> {
+    async fn get(&mut self, res: Resource<MyObject>) -> wasmtime::Result<u32> {
         self.object_table
             .get(&res.rep())
             .map(|o| o.value)
@@ -97,37 +99,20 @@ impl WasiView for HostState {
     }
 }
 
-// As guest, when you build the output is a wasm module, not a component in terms of wasmtime
-// this allows us to do it in rust however as i'll note below it's preferred to do it through the wasm-tools cli
-// and just import with Component::from_file
-use wit_component::ComponentEncoder;
-
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let mut config = Config::new();
-    config.wasm_component_model(true);
+    config.wasm_component_model(true).async_support(true);
 
     let engine = Engine::new(&config)?;
     let mut store = Store::new(&engine, HostState::default());
     let mut linker = Linker::new(&engine);
 
     let wasm_module_path = "../host-jco/component.wasm";
-    // let wasm_module_path = "../guest.wasm";
 
-    // let module =
-    //     std::fs::read(wasm_module_path).expect("WASM Module missing, did you build guest-rust?");
-
-    // let component = ComponentEncoder::default()
-    //     .module(module.as_slice())?
-    //     .adapter(name, bytes)
-    //     .validate(true)
-    //     .encode()?;
-
-    // let component = Component::from_binary(&engine, &component)?;
     let component = Component::from_file(&engine, wasm_module_path)?;
 
     crate::test::example::my_interface::add_to_linker(&mut linker, |s| s)?;
-    // wasmtime_wasi::preview2::types::add_to_linker(&mut linker, |o| o)?;
-    // wasmtime_wasi::preview2::preopens::add_to_linker(&mut linker, |o| o)?;
     wasmtime_wasi::preview2::bindings::io::streams::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::cli::environment::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::cli::exit::add_to_linker(&mut linker, |x| x)?;
@@ -139,15 +124,15 @@ fn main() -> Result<()> {
     wasmtime_wasi::preview2::bindings::cli::terminal_stdin::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::cli::terminal_stdout::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::cli::terminal_stderr::add_to_linker(&mut linker, |x| x)?;
+    wasmtime_wasi::preview2::bindings::filesystem::types::add_to_linker(&mut linker, |x| x)?;
+    wasmtime_wasi::preview2::bindings::filesystem::preopens::add_to_linker(&mut linker, |x| x)?;
 
-    let (_world, instance) = MyWorld::instantiate(&mut store, &component, &linker).unwrap();
+    let (command, _instance) = wasmtime_wasi::preview2::command::Command::instantiate_async(
+        &mut store, &component, &linker,
+    )
+    .await?;
 
-    // let result = bindings.
-    // instance.get_func(store, name)
-
-    let start = instance.get_typed_func::<(), ()>(&mut store, "_start")?;
-
-    start.call(&mut store, ())?;
+    command.wasi_cli_run().call_run(&mut store).await?.ok();
 
     Ok(())
 }

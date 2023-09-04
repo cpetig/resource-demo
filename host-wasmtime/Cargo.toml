@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
+tokio = { version = "1.32.0", features = ["rt", "macros"] }
 wasmtime = { git = "https://github.com/bytecodealliance/wasmtime.git", version = "13.0.0", features = ["component-model"] }
 wasmtime-wasi = { git = "https://github.com/bytecodealliance/wasmtime.git", version = "13.0.0" }
 wit-component = "0.14.0"
