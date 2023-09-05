@@ -2,9 +2,19 @@
 
 ## Prerequisites
 
-Rust with target wasm32-wasi
+Rust target wasm32-wasi:
+```bash
+rustup target add wasm32-wasi
+```
 
 CMake
+
+cpetig/wit-bindgen:
+```bash
+git clone https://github.com/cpetig/wit-bindgen.git
+cd wit-bindgen
+cargo install --path .
+```
 
 ## Working
 
@@ -22,7 +32,9 @@ CMake
 ```bash
 cd guest-rust
 cargo build --target wasm32-wasi --release
+
 cd ../host-wamr
+./generate.sh
 mkdir build
 cd build
 cmake ..
@@ -40,19 +52,10 @@ Prerequisite: wasi-SDK
 
 ```bash
 cd guest-c
+./generate.sh
 make
 cd ..
 ln -sf guest-c/guest-c.wasm guest.wasm 
-```
-
-## Regenerating C++ host bindings
-
-```bash
-git clone https://github.com/cpetig/wit-bindgen.git
-cd wit-bindgen
-cargo install --path .
-cd ../host-wamr
-wit-bindgen cpp-host ../wit/simple.wit
 ```
 
 ## Other environments
