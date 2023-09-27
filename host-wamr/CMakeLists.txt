@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 project(wasm_executor)
 
+set(CMAKE_CXX_STANDARD 17)
+if(APPLE)
+  add_definitions(-DBH_PLATFORM_DARWIN)
+endif()
+
 set (WAMR_BUILD_PLATFORM "linux")
 set (WAMR_BUILD_TARGET "X86_64")
 set (WAMR_BUILD_INTERP 1)
