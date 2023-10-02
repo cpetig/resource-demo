@@ -25,7 +25,7 @@ cargo install --path .
 |Rust|✅ wit-bindgen|✅ wasmtime [^6]|
 |JavaScript|🚧 [^5] |✅ jco [^6]|
 |Go|☁️ [^3]| ? |
-|Python|☁️ [^4]|☁️ [^4] |
+|Python|🚧 [^4]|🚧 [^4] |
 
 ## Compiling and Running
 
@@ -86,6 +86,6 @@ JCO's preview2 browser shim still needs the older
 JavaScript: 
     https://github.com/bytecodealliance/javy is potentially smaller than spidermonkey embedded by jco, you will need another tool to generate guest bindings for imported functions, IIRC. A path using C bindings with yet to be written JavaScript wrapping should be viable.
 
-[^4]: Python: https://pypi.org/project/componentize-py/ 
+[^4]: Python: https://pypi.org/project/componentize-py/ recently gained resource support
 
 [^3]: Go: WIT bindgen support is [being worked on](https://github.com/bytecodealliance/SIG-Guest-Languages/blob/main/docs/subgroups.md)
