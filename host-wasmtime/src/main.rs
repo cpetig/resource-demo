@@ -106,7 +106,7 @@ async fn main() -> Result<()> {
     let mut store = Store::new(&engine, HostState::default());
     let mut linker = Linker::new(&engine);
 
-    let wasm_module_path = "../host-jco/component.wasm";
+    let wasm_module_path = "component.wasm";
 
     let component = Component::from_file(&engine, wasm_module_path)?;
 

@@ -1,3 +1,5 @@
+import { getDirectories as getDirectories2} from "./filesystem.js";
+
 let _env;
 export function _setEnv (envObj) {
   _env = Object.entries(envObj);
@@ -80,3 +82,5 @@ export const { dropTerminalOutput } = terminalOutput;
 export const { getTerminalStderr } = terminalStderr;
 export const { getTerminalStdin } = terminalStdin;
 export const { getTerminalStdout } = terminalStdout;
+
+export const { getDirectories } = getDirectories2;
