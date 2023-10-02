@@ -29,10 +29,8 @@ struct HostState {
 
 impl Default for HostState {
     fn default() -> Self {
-        let mut table = Table::new();
-        let wasi = wasmtime_wasi::preview2::WasiCtxBuilder::new()
-            .build(&mut table)
-            .unwrap();
+        let table = Table::new();
+        let wasi = wasmtime_wasi::preview2::WasiCtxBuilder::new().build();
         Self {
             object_table: Default::default(),
             table,
@@ -126,6 +124,7 @@ async fn main() -> Result<()> {
     wasmtime_wasi::preview2::bindings::cli::terminal_stderr::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::filesystem::types::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::filesystem::preopens::add_to_linker(&mut linker, |x| x)?;
+    wasmtime_wasi::preview2::bindings::sockets::tcp::add_to_linker(&mut linker, |x| x)?;
 
     let (command, _instance) = wasmtime_wasi::preview2::command::Command::instantiate_async(
         &mut store, &component, &linker,

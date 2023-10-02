@@ -1,6 +1,6 @@
 #!/bin/sh
 ln -s ../guest-rust/target/wasm32-wasi/release/guest-rust.wasm
-wasm-tools component new guest-rust.wasm -o component.wasm --adapt ~/wasi_snapshot_preview1.wasm 
+wasm-tools component new guest-rust.wasm -o component.wasm --adapt wasi_snapshot_preview1.wasm 
 jco transpile component.wasm -o html --no-typescript \
     --map wasi:filesystem/*=./bytecodealliance/preview2-shim/filesystem.js \
     --map wasi:cli/*=./bytecodealliance/preview2-shim/cli.js \
