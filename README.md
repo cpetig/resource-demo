@@ -58,6 +58,21 @@ cd ..
 ln -sf guest-c/guest-c.wasm guest.wasm 
 ```
 
+### Wasmtime host
+
+You need a preview1 adapter matching the wasmtime version, see 
+https://github.com/bytecodealliance/wasmtime/releases for the 
+command adapter downloads. 
+
+But most likely you will need to check out the exact same wasmtime 
+used for the host and build the adapter:
+```bash
+cd wasmtime/crates/wasi-preview1-component-adapter
+cargo build -p wasi-preview1-component-adapter --target wasm32-unknown-unknown --release --features command --no-default-features
+cp ../../target/wasm32-unknown-unknown/release/wasi_snapshot_preview1.wasm …/resource-demo/host-wasmtime
+
+```
+
 ## Other environments
 
 ### Host languages
