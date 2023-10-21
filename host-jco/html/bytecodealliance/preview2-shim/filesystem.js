@@ -156,6 +156,10 @@ export const types = {
 
 export { types as filesystemTypes }
 
+export function filesystemErrorCode(id) {
+  return null;
+}
+
 export const { getDirectories } = preopens;
 export const { appendViaStream,
   dropDescriptor,
@@ -163,3 +167,5 @@ export const { appendViaStream,
   getType,
   openAt,
   writeViaStream } = types;
+
+export const { Descriptor } = Number;

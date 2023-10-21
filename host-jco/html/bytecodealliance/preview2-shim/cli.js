@@ -12,6 +12,13 @@ export const environment = {
   }
 };
 
+export class TerminalOutput {
+  constructor(a) { this.value = a; }
+}
+export class TerminalInput {
+  constructor(a) { this.value = a; }
+}
+
 class ComponentExit extends Error {
   constructor(code) {
     super(`Component exited ${code === 0 ? 'successfully' : 'with error'}`);
@@ -57,19 +64,19 @@ export const terminalOutput = {
 
 export const terminalStderr = {
   getTerminalStderr () {
-    return 0;
+    return new TerminalInput(0);
   }
 };
 
 export const terminalStdin = {
   getTerminalStdin () {
-    return 1;
+    return new TerminalOutput(1);
   }
 };
 
 export const terminalStdout = {
   getTerminalStdout () {
-    return 2;
+    return new TerminalOutput(2);
   }
 };
 
@@ -84,3 +91,4 @@ export const { getTerminalStdin } = terminalStdin;
 export const { getTerminalStdout } = terminalStdout;
 
 export const { getDirectories } = getDirectories2;
+

@@ -73,6 +73,18 @@ cp ../../target/wasm32-unknown-unknown/release/wasi_snapshot_preview1.wasm …/r
 
 ```
 
+### Jco host
+
+Sorry, jco is currently broken until I figure out to compile typescript (shouldn't be that difficult to do).
+
+Please use the adapter built from the wasmtime source (see above)
+
+```bash
+cargo install simple-http-server
+./generate.sh
+simple-http-server --cors --coop --coep --nocache -i html
+```
+
 ## Other environments
 
 ### Host languages

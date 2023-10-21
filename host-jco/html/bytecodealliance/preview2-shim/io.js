@@ -63,3 +63,8 @@ export const { blockingWrite,
   dropInputStream,
   dropOutputStream,
   write } = streams;
+
+export class Error {}
+
+export const OutputStream = Number;
+export const InputStream = Number;
