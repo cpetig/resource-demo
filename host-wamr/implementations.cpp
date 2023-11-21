@@ -22,10 +22,18 @@ void test::example::my_interface::MyObject::Set(uint32_t v) {
 }
 
 test::example::my_interface::MyObject::~MyObject() {
-    std::cout << "drop with value " << p_impl->value << std::endl;
-    delete p_impl;
+    if (p_impl) {
+        std::cout << "drop with value " << p_impl->value << std::endl;
+        delete p_impl;
+    }
 }
 
+test::example::my_interface::MyObject::MyObject(MyObject && b) : p_impl(b.p_impl)
+{
+    b.p_impl = nullptr;
+}
+
+#if 0
 static std::vector<my_world::ResourceBase*> resources;
 
 my_world::ResourceBase::ResourceBase() : id(resources.size()) {
@@ -39,3 +47,4 @@ my_world::ResourceBase::~ResourceBase() {
 my_world::ResourceBase* my_world::ResourceBase::lookup_resource(int32_t id) {
     return resources.at(id);
 }
+#endif

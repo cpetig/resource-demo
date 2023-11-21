@@ -1,2 +1,2 @@
 #!/bin/sh
-wit-bindgen cpp-host ../wit/simple.wit
+wit-bindgen cpp ../wit/simple.wit --host

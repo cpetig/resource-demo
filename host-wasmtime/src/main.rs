@@ -111,6 +111,7 @@ async fn main() -> Result<()> {
     let component = Component::from_file(&engine, wasm_module_path)?;
 
     crate::test::example::my_interface::add_to_linker(&mut linker, |s| s)?;
+    wasmtime_wasi::preview2::bindings::io::error::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::io::streams::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::cli::environment::add_to_linker(&mut linker, |x| x)?;
     wasmtime_wasi::preview2::bindings::cli::exit::add_to_linker(&mut linker, |x| x)?;
