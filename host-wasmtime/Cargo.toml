@@ -6,8 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.75"
-tokio = { version = "1.33.0", features = ["rt", "macros"] }
-wasmtime = { git = "https://github.com/bytecodealliance/wasmtime.git", version = "16.0.0", features = ["component-model"] }
-wasmtime-wasi = { git = "https://github.com/bytecodealliance/wasmtime.git", version = "16.0.0" }
-wit-component = "0.18.0"
+anyhow = "1.0.79"
+tokio = { version = "1.35.1", features = ["rt", "macros"] }
+wasmtime = { version = "17.0.0", features = ["component-model"] }
+wasmtime-wasi = { version = "17.0.0" }
+wit-component = "0.20.0"

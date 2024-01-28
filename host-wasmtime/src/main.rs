@@ -6,7 +6,7 @@ use wasmtime::{
     component::{Component, Linker, Resource},
     Config, Engine, Store,
 };
-use wasmtime_wasi::preview2::{Table, WasiCtx, WasiView};
+use wasmtime_wasi::preview2::{ResourceTable, WasiCtx, WasiView};
 
 use crate::test::example::my_interface::MyObject;
 
@@ -23,13 +23,13 @@ struct ObjectImpl {
 //derive(Default)]
 struct HostState {
     object_table: std::collections::HashMap<u32, ObjectImpl>,
-    table: Table,
+    table: ResourceTable,
     wasi: WasiCtx,
 }
 
 impl Default for HostState {
     fn default() -> Self {
-        let table = Table::new();
+        let table = ResourceTable::new();
         let wasi = wasmtime_wasi::preview2::WasiCtxBuilder::new().build();
         Self {
             object_table: Default::default(),
@@ -83,10 +83,10 @@ impl test::example::my_interface::HostMyObject for HostState {
 }
 
 impl WasiView for HostState {
-    fn table(&self) -> &Table {
+    fn table(&self) -> &ResourceTable {
         &self.table
     }
-    fn table_mut(&mut self) -> &mut Table {
+    fn table_mut(&mut self) -> &mut ResourceTable {
         &mut self.table
     }
     fn ctx(&self) -> &WasiCtx {
@@ -111,21 +111,7 @@ async fn main() -> Result<()> {
     let component = Component::from_file(&engine, wasm_module_path)?;
 
     crate::test::example::my_interface::add_to_linker(&mut linker, |s| s)?;
-    wasmtime_wasi::preview2::bindings::io::error::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::io::streams::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::environment::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::exit::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::stdin::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::stdout::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::stderr::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::terminal_input::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::terminal_output::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::terminal_stdin::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::terminal_stdout::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::cli::terminal_stderr::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::filesystem::types::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::filesystem::preopens::add_to_linker(&mut linker, |x| x)?;
-    wasmtime_wasi::preview2::bindings::sockets::tcp::add_to_linker(&mut linker, |x| x)?;
+    wasmtime_wasi::preview2::command::add_to_linker(&mut linker)?;
 
     let (command, _instance) = wasmtime_wasi::preview2::command::Command::instantiate_async(
         &mut store, &component, &linker,
