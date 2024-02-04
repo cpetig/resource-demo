@@ -7,7 +7,7 @@
 namespace test {
 namespace example {
 namespace my_interface {
-class MyObject : public my_world::ResourceBase<MyObject> {
+class MyObject : public my_world::ResourceExportBase<MyObject> {
   uint32_t value;
 
 public:
