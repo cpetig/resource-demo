@@ -1,28 +1,27 @@
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 
-use test::example::my_interface::Host;
+use test::example::my_interface::{self, Host};
 use wasmtime::{
     self,
     component::{Component, Linker, Resource},
     Config, Engine, Store,
 };
-use wasmtime_wasi::preview2::{ResourceTable, WasiCtx, WasiView};
-
-use crate::test::example::my_interface::MyObject;
+use wasmtime_wasi::preview2::{self, ResourceTable, WasiCtx, WasiCtxBuilder, WasiView};
 
 wasmtime::component::bindgen!({
     path: "../wit/simple.wit",
     world: "my-world",
     async: true,
+    with: {
+        "test:example/my-interface/my-object": ObjectImpl,
+    }
 });
 
-struct ObjectImpl {
+pub struct ObjectImpl {
     value: u32,
 }
 
-//derive(Default)]
 struct HostState {
-    object_table: std::collections::HashMap<u32, ObjectImpl>,
     table: ResourceTable,
     wasi: WasiCtx,
 }
@@ -30,9 +29,8 @@ struct HostState {
 impl Default for HostState {
     fn default() -> Self {
         let table = ResourceTable::new();
-        let wasi = wasmtime_wasi::preview2::WasiCtxBuilder::new().build();
+        let wasi = WasiCtxBuilder::new().build();
         Self {
-            object_table: Default::default(),
             table,
             wasi,
         }
@@ -42,43 +40,25 @@ impl Default for HostState {
 impl Host for HostState {}
 
 #[wasmtime::component::__internal::async_trait]
-impl test::example::my_interface::HostMyObject for HostState {
-    async fn new(&mut self, a: u32) -> wasmtime::Result<Resource<MyObject>> {
+impl my_interface::HostMyObject for HostState {
+    async fn new(&mut self, a: u32) -> wasmtime::Result<Resource<ObjectImpl>> {
         println!("New {a}");
-        let handle = Resource::<MyObject>::new_own(self.object_table.len() as u32);
-        self.object_table
-            .insert(handle.rep(), ObjectImpl { value: a });
-        Ok(handle)
+        Ok(self.table.push(ObjectImpl { value: a })?)
     }
 
-    async fn set(&mut self, res: Resource<MyObject>, v: u32) -> wasmtime::Result<()> {
-        self.object_table
-            .get_mut(&res.rep())
-            .map(|o| o.value = v)
-            .ok_or(anyhow!(
-                "tried to set a resource `{}` that doesn't exist",
-                res.rep()
-            ))
+    async fn set(&mut self, res: Resource<ObjectImpl>, v: u32) -> wasmtime::Result<()> {
+        Ok(self.table.get_mut(&res).map(|o| o.value = v)?)
     }
 
-    async fn get(&mut self, res: Resource<MyObject>) -> wasmtime::Result<u32> {
-        self.object_table
-            .get(&res.rep())
-            .map(|o| o.value)
-            .ok_or(anyhow!(
-                "tried to get a resource `{}` that doesn't exist",
-                res.rep()
-            ))
+    async fn get(&mut self, res: Resource<ObjectImpl>) -> wasmtime::Result<u32> {
+        Ok(self.table.get(&res).map(|o| o.value)?)
     }
 
-    fn drop(&mut self, res: Resource<MyObject>) -> wasmtime::Result<()> {
-        self.object_table
-            .remove(&res.rep())
-            .map(|o| println!("Value at drop {}", o.value))
-            .ok_or(anyhow!(
-                "tried to drop a resource `{}` that doesn't exist",
-                res.rep()
-            ))
+    fn drop(&mut self, res: Resource<ObjectImpl>) -> wasmtime::Result<()> {
+        Ok(self
+            .table
+            .delete(res)
+            .map(|o| println!("Value at drop {}", o.value))?)
     }
 }
 
@@ -104,16 +84,15 @@ async fn main() -> Result<()> {
 
     let engine = Engine::new(&config)?;
     let mut store = Store::new(&engine, HostState::default());
-    let mut linker = Linker::new(&engine);
 
     let wasm_module_path = "component.wasm";
-
     let component = Component::from_file(&engine, wasm_module_path)?;
 
-    crate::test::example::my_interface::add_to_linker(&mut linker, |s| s)?;
-    wasmtime_wasi::preview2::command::add_to_linker(&mut linker)?;
+    let mut linker = Linker::new(&engine);
+    my_interface::add_to_linker(&mut linker, |s| s)?;
+    preview2::command::add_to_linker(&mut linker)?;
 
-    let (command, _instance) = wasmtime_wasi::preview2::command::Command::instantiate_async(
+    let (command, _instance) = preview2::command::Command::instantiate_async(
         &mut store, &component, &linker,
     )
     .await?;
