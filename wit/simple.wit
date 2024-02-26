@@ -10,4 +10,5 @@ interface my-interface {
 
 world my-world {
     import my-interface;
+    export my-interface;
 }

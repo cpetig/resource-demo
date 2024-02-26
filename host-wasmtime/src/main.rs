@@ -63,16 +63,10 @@ impl my_interface::HostMyObject for HostState {
 }
 
 impl WasiView for HostState {
-    fn table(&self) -> &ResourceTable {
-        &self.table
-    }
-    fn table_mut(&mut self) -> &mut ResourceTable {
+    fn table(&mut self) -> &mut ResourceTable {
         &mut self.table
     }
-    fn ctx(&self) -> &WasiCtx {
-        &self.wasi
-    }
-    fn ctx_mut(&mut self) -> &mut WasiCtx {
+    fn ctx(&mut self) -> &mut WasiCtx {
         &mut self.wasi
     }
 }
