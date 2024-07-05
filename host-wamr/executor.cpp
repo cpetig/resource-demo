@@ -140,15 +140,13 @@ int main()
         goto fail;
     }
 
-    if (!(func = wasm_runtime_lookup_function(module_inst, "_start",
-                                              "()")))
+    if (!(func = wasm_runtime_lookup_function(module_inst, "_start")))
     {
         printf("The _start wasm function is not found.\n");
         goto fail;
     }
 
-    if (!(cabi_alloc_ptr = wasm_runtime_lookup_function(module_inst, "cabi_realloc",
-                                                        "(iiii)i")))
+    if (!(cabi_alloc_ptr = wasm_runtime_lookup_function(module_inst, "cabi_realloc")))
     {
         printf("The cabi_realloc wasm function is not found.\n");
         goto fail;
