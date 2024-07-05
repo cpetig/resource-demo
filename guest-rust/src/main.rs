@@ -1,21 +1,28 @@
 use std::sync::atomic::AtomicU32;
 
-use exports::test::example::my_interface::GuestMyObject;
+use exports::test::example::my_interface::{Guest, GuestMyObject};
 
 wit_bindgen::generate!({
     path: "../wit/simple.wit",
     world: "my-world",
-    exports: { "test:example/my-interface/my-object": MyObject },
 });
+
+export!(MyWorld);
+
+struct MyWorld;
+
+impl Guest for MyWorld {
+    type MyObject = MyObject;
+}
 
 pub struct MyObject(AtomicU32);
 
 impl GuestMyObject for MyObject {
-    fn new(a:u32) -> Self {
+    fn new(a: u32) -> Self {
         Self(AtomicU32::new(a))
     }
 
-    fn set(&self,v:u32,) {
+    fn set(&self, v: u32) {
         self.0.store(v, std::sync::atomic::Ordering::SeqCst);
     }
 
@@ -27,6 +34,6 @@ impl GuestMyObject for MyObject {
 fn main() {
     let o = test::example::my_interface::MyObject::new(42);
     o.set(17);
-    o.set(o.get()*2);
+    o.set(o.get() * 2);
     println!("Object is {}", o.get());
 }

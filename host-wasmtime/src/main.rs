@@ -6,7 +6,7 @@ use wasmtime::{
     component::{Component, Linker, Resource},
     Config, Engine, Store,
 };
-use wasmtime_wasi::preview2::{self, ResourceTable, WasiCtx, WasiCtxBuilder, WasiView};
+use wasmtime_wasi::{self, bindings::Command, ResourceTable, WasiCtx, WasiCtxBuilder, WasiView};
 
 wasmtime::component::bindgen!({
     path: "../wit/simple.wit",
@@ -30,10 +30,7 @@ impl Default for HostState {
     fn default() -> Self {
         let table = ResourceTable::new();
         let wasi = WasiCtxBuilder::new().build();
-        Self {
-            table,
-            wasi,
-        }
+        Self { table, wasi }
     }
 }
 
@@ -41,17 +38,17 @@ impl Host for HostState {}
 
 #[wasmtime::component::__internal::async_trait]
 impl my_interface::HostMyObject for HostState {
-    async fn new(&mut self, a: u32) -> wasmtime::Result<Resource<ObjectImpl>> {
+    async fn new(&mut self, a: u32) -> Resource<ObjectImpl> {
         println!("New {a}");
-        Ok(self.table.push(ObjectImpl { value: a })?)
+        self.table.push(ObjectImpl { value: a }).unwrap()
     }
 
-    async fn set(&mut self, res: Resource<ObjectImpl>, v: u32) -> wasmtime::Result<()> {
-        Ok(self.table.get_mut(&res).map(|o| o.value = v)?)
+    async fn set(&mut self, res: Resource<ObjectImpl>, v: u32) {
+        self.table.get_mut(&res).map(|o| o.value = v).unwrap()
     }
 
-    async fn get(&mut self, res: Resource<ObjectImpl>) -> wasmtime::Result<u32> {
-        Ok(self.table.get(&res).map(|o| o.value)?)
+    async fn get(&mut self, res: Resource<ObjectImpl>) -> u32 {
+        self.table.get(&res).map(|o| o.value).unwrap()
     }
 
     fn drop(&mut self, res: Resource<ObjectImpl>) -> wasmtime::Result<()> {
@@ -84,12 +81,9 @@ async fn main() -> Result<()> {
 
     let mut linker = Linker::new(&engine);
     my_interface::add_to_linker(&mut linker, |s| s)?;
-    preview2::command::add_to_linker(&mut linker)?;
+    wasmtime_wasi::add_to_linker_async(&mut linker)?;
 
-    let (command, _instance) = preview2::command::Command::instantiate_async(
-        &mut store, &component, &linker,
-    )
-    .await?;
+    let (command, _instance) = Command::instantiate_async(&mut store, &component, &linker).await?;
 
     command.wasi_cli_run().call_run(&mut store).await?.ok();
 

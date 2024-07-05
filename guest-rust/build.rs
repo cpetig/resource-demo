@@ -1,8 +1,8 @@
 fn main() {
     // Till we can set default-targets per crate
     assert_eq!(
-        std::env::var("TARGET").unwrap(),
+        &std::env::var("TARGET").unwrap()[..11],
         "wasm32-wasi",
-        "\nSpecify --target wasm32-wasi for this package\n cargo build -p guest --target wasm32-unknown-unknown"
+        "\nSpecify --target wasm32-wasip1 for this package\n cargo build --target wasm32-wasip1"
     );
 }
