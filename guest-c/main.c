@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <malloc.h>
 #include "my_world.h"
 
 struct exports_test_example_my_interface_my_object_t {
