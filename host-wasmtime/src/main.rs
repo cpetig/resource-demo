@@ -83,7 +83,7 @@ async fn main() -> Result<()> {
     my_interface::add_to_linker(&mut linker, |s| s)?;
     wasmtime_wasi::add_to_linker_async(&mut linker)?;
 
-    let (command, _instance) = Command::instantiate_async(&mut store, &component, &linker).await?;
+    let command = Command::instantiate_async(&mut store, &component, &linker).await?;
 
     command.wasi_cli_run().call_run(&mut store).await?.ok();
 
