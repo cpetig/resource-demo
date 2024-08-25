@@ -1,0 +1,1 @@
+../wit-bindgen.cpp/crates/cpp/helper-types/wit-guest.h
