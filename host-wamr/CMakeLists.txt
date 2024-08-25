@@ -22,5 +22,6 @@ set (WAMR_ROOT_DIR wasm-micro-runtime)
 include (${WAMR_ROOT_DIR}/build-scripts/runtime_lib.cmake)
 add_library(vmlib ${WAMR_RUNTIME_LIB_SOURCE})
 
-add_executable(executor executor.cpp my_world_host.cpp)
+add_executable(executor executor.cpp my_world_host.cpp implementation.cpp)
 target_link_libraries (executor vmlib)
+target_include_directories(executor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
