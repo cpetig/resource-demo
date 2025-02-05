@@ -36,7 +36,6 @@ impl Default for HostState {
 
 impl Host for HostState {}
 
-#[wasmtime::component::__internal::async_trait]
 impl my_interface::HostMyObject for HostState {
     async fn new(&mut self, a: u32) -> Resource<ObjectImpl> {
         println!("New {a}");
@@ -51,7 +50,7 @@ impl my_interface::HostMyObject for HostState {
         self.table.get(&res).map(|o| o.value).unwrap()
     }
 
-    fn drop(&mut self, res: Resource<ObjectImpl>) -> wasmtime::Result<()> {
+    async fn drop(&mut self, res: Resource<ObjectImpl>) -> wasmtime::Result<()> {
         Ok(self
             .table
             .delete(res)
