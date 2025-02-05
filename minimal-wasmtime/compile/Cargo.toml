@@ -1,0 +1,10 @@
+[package]
+name = "compile"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wasmtime = { version = "31.0.0", default-features = false, features = ["pulley", "cranelift"] }
+
+[patch.crates-io]
+wasmtime = { path = "../../../wasmtime/crates/wasmtime" }

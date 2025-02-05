@@ -1,0 +1,13 @@
+[package]
+name = "minimal-wasmtime"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wasmtime = { version = "31.0.0", default-features = false, features = ["pulley", "runtime"] }
+
+[profile.release]
+panic = 'abort'
+
+[patch.crates-io]
+wasmtime = { path = "../../wasmtime/crates/wasmtime" }
