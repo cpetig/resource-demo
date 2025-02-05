@@ -10,4 +10,4 @@ wasmtime = { version = "31.0.0", default-features = false, features = ["pulley",
 panic = 'abort'
 
 [patch.crates-io]
-wasmtime = { path = "../../wasmtime/crates/wasmtime" }
+wasmtime = { git = "https://github.com/cpetig/wasmtime-adapter.git", branch = "pulley-fix" }

@@ -44,6 +44,7 @@ checksum = "67ba02a97a2bd10f4b59b25c7973101c79642302776489e030cd13cdab09ed15"
 [[package]]
 name = "cranelift-bitset"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "serde",
  "serde_derive",
@@ -52,6 +53,7 @@ dependencies = [
 [[package]]
 name = "cranelift-entity"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-bitset",
  "serde",
@@ -222,6 +224,7 @@ dependencies = [
 [[package]]
 name = "pulley-interpreter"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-bitset",
  "log",
@@ -329,6 +332,7 @@ dependencies = [
 [[package]]
 name = "wasmtime"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "anyhow",
  "bitflags",
@@ -365,6 +369,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-asm-macros"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cfg-if",
 ]
@@ -372,6 +377,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-environ"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "anyhow",
  "cranelift-bitset",
@@ -391,6 +397,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-jit-icache-coherence"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "anyhow",
  "cfg-if",
@@ -401,6 +408,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-math"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "libm",
 ]
@@ -408,10 +416,12 @@ dependencies = [
 [[package]]
 name = "wasmtime-slab"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 
 [[package]]
 name = "wasmtime-versioned-export-macros"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "proc-macro2",
  "quote",

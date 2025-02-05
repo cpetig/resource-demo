@@ -78,6 +78,7 @@ dependencies = [
 [[package]]
 name = "cranelift-assembler-x64"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-assembler-x64-meta",
 ]
@@ -85,10 +86,12 @@ dependencies = [
 [[package]]
 name = "cranelift-assembler-x64-meta"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 
 [[package]]
 name = "cranelift-bforest"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-entity",
 ]
@@ -96,6 +99,7 @@ dependencies = [
 [[package]]
 name = "cranelift-bitset"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "serde",
  "serde_derive",
@@ -104,6 +108,7 @@ dependencies = [
 [[package]]
 name = "cranelift-codegen"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "arbitrary",
  "bumpalo",
@@ -129,6 +134,7 @@ dependencies = [
 [[package]]
 name = "cranelift-codegen-meta"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-assembler-x64",
  "cranelift-codegen-shared",
@@ -138,10 +144,12 @@ dependencies = [
 [[package]]
 name = "cranelift-codegen-shared"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 
 [[package]]
 name = "cranelift-control"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "arbitrary",
 ]
@@ -149,6 +157,7 @@ dependencies = [
 [[package]]
 name = "cranelift-entity"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-bitset",
  "serde",
@@ -158,6 +167,7 @@ dependencies = [
 [[package]]
 name = "cranelift-frontend"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-codegen",
  "log",
@@ -168,10 +178,12 @@ dependencies = [
 [[package]]
 name = "cranelift-isle"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 
 [[package]]
 name = "cranelift-native"
 version = "0.118.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-codegen",
  "libc",
@@ -369,6 +381,7 @@ dependencies = [
 [[package]]
 name = "pulley-interpreter"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cranelift-bitset",
  "log",
@@ -559,6 +572,7 @@ dependencies = [
 [[package]]
 name = "wasmtime"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "addr2line",
  "anyhow",
@@ -589,6 +603,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-asm-macros"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "cfg-if",
 ]
@@ -596,6 +611,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-cranelift"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "anyhow",
  "cfg-if",
@@ -620,6 +636,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-environ"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "anyhow",
  "cranelift-bitset",
@@ -641,6 +658,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-fiber"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "anyhow",
  "cc",
@@ -654,6 +672,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-math"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "libm",
 ]
@@ -661,6 +680,7 @@ dependencies = [
 [[package]]
 name = "wasmtime-versioned-export-macros"
 version = "31.0.0"
+source = "git+https://github.com/cpetig/wasmtime-adapter.git?branch=pulley-fix#6f3f3c9ebe67ec41e4b06c0d975dd5deb1de8df4"
 dependencies = [
  "proc-macro2",
  "quote",
