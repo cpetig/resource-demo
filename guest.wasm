@@ -1,1 +1,1 @@
-guest-rust/target/wasm32-wasi/release/guest-rust.wasm
+guest-rust/target/wasm32-wasip1/release/guest-rust.wasm
